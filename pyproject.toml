@@ -1,0 +1,105 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "lit-ssr"
+dynamic = ["version"]
+description = 'Lit SSR is a library to connect to lit-ssr-utils NPM package.'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "LGPL-3.0-or-later"
+keywords = ["lit-ssr", "lit-ssr-utils", "lit-html", "lit-element", "lit", "ssr", "server-side-rendering"]
+authors = [
+  { name = "jefer94", email = "jdefreitaspinto@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "aiofiles",
+]
+
+[project.urls]
+Documentation = "https://github.com/jefer94/lit-ssr#readme"
+Issues = "https://github.com/jefer94/lit-ssr/issues"
+Source = "https://github.com/jefer94/lit-ssr"
+
+[tool.hatch.version]
+path = "src/lit_ssr/__about__.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "coverage[toml]>=6.5",
+  "pytest",
+  "black",
+  "anyio[trio]",
+]
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests}"
+test-cov = "coverage run -m pytest {args:tests}"
+cov-report = [
+  "- coverage combine",
+  "coverage report",
+]
+cov = [
+  "test-cov",
+  "cov-report",
+]
+
+[[tool.hatch.envs.all.matrix]]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+[tool.hatch.envs.types]
+dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/lit_ssr tests}"
+
+[tool.coverage.run]
+source_pkgs = ["lit_ssr", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/lit_ssr/__about__.py",
+]
+
+[tool.coverage.paths]
+lit_ssr = ["src/lit_ssr", "*/lit-ssr/src/lit_ssr"]
+tests = ["tests", "*/lit-ssr/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+[project.optional-dependencies]
+requests = [
+  "requests",
+  "brotli",
+  "aiofiles",
+]
+aiohttp = [
+  "aiohttp",
+  "aiodns",
+  "brotli",
+  "aiofiles",
+]
+httpx = [
+  "httpx",
+  "httpcore",
+  "h11",
+  "idna",
+  "brotli",
+  "aiofiles",
+]
